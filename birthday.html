@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>妈咪生日快乐 🎂</title>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+(function () {
+    emailjs.init("wr8snzwkkR8qQP6P3"); // Public Key ✅
+})();
+</script>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #ffe4ec;
+    text-align: center;
+    padding: 40px;
+    overflow: hidden;
+}
+.card {
+    background: white;
+    max-width: 450px;
+    margin: auto;
+    padding: 30px;
+    border-radius: 20px;
+    position: relative;
+    z-index: 10;
+}
+textarea {
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+}
+button {
+    background: #e75480;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ✨ 爱心样式 */
+.heart {
+    position: fixed;
+    bottom: -20px;
+    font-size: 20px;
+    animation: floatUp linear forwards;
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+@keyframes floatUp {
+    from {
+        transform: translateY(0);
+        opacity: 0.9;
+    }
+    to {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>老妈子！生日快乐 🎂</h1>
+
+    <textarea id="wish1" placeholder="生日愿望 ①"></textarea>
+    <textarea id="wish2" placeholder="生日愿望 ②"></textarea>
+    <textarea id="wish3" placeholder="生日愿望 ③"></textarea>
+
+    <button type="button" onclick="sendMail()">送出愿望 💌</button>
+    <p id="status"></p>
+</div>
+
+<!-- 🎵 生日歌 -->
+<audio id="birthdayMusic">
+    <source src="C:\Users\ACER_USER\Desktop\birthday.mp4" type="audio/mpeg">
+</audio>
+
+<script>
+let heartInterval = null;
+
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = "💖";
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (16 + Math.random() * 20) + "px";
+    heart.style.animationDuration = (4 + Math.random() * 3) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 7000);
+}
+
+function startHearts() {
+    if (heartInterval) return;
+    heartInterval = setInterval(createHeart, 500);
+}
+
+function sendMail() {
+    const wish1 = document.getElementById("wish1").value.trim();
+    const wish2 = document.getElementById("wish2").value.trim();
+    const wish3 = document.getElementById("wish3").value.trim();
+
+    if (!wish1 && !wish2 && !wish3) {
+        document.getElementById("status").innerText = "请至少填写一个愿望 💖";
+        return;
+    }
+
+    emailjs.send("service_o5mhh1y", "template_dgexekh", {
+        wish1, wish2, wish3
+    })
+    .then(() => {
+        document.getElementById("status").innerText = "💖 愿望已成功送出！我尽量实现蛤...";
+
+        // 🎵 播放生日歌
+        const music = document.getElementById("birthdayMusic");
+        music.currentTime = 0;
+        music.play();
+
+        // ✨ 开始飘爱心
+        startHearts();
+    })
+    .catch(error => {
+        console.error(error);
+        document.getElementById("status").innerText = "❌ 发送失败，请再试一次";
+    });
+}
+</script>
+
+</body>
+</html>
